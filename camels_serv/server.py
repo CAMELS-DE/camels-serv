@@ -1,5 +1,9 @@
-from flask import Flask
+from sys import version_info
+
+from flask import Flask, jsonify
 from flask_cors import CORS
+
+from camels_serv import __version__
 
 
 def get_app():
@@ -8,12 +12,23 @@ def get_app():
     CORS(app, origin='*')
 
     # import bluprints and register
-    from camels_serv.describe_blueprint import describe
-    app.register_blueprint(describe)
+    from camels_serv.api.process_state import process_blueprint
+    app.register_blueprint(process_blueprint)
+
+    # define the 'landing page' api endpoint
+    @app.route('/', methods=['GET', 'POST'])
+    def index():
+        info = {
+            'message': 'Welcome to CAMELS-DE API. Maybe you wanted to visit https://camels-de.org',
+            'api_version': __version__,
+            'python_version': f"{version_info.major}.{version_info.minor}.{version_info.micro}"
+        }
+
+        return jsonify(info)
 
     return app
 
 
 if __name__ == '__main__':
     app = get_app()
-    app.run(debug=False, host="0.0.0.0")
+    app.run(debug=True, host="0.0.0.0")
