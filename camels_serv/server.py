@@ -13,7 +13,7 @@ def get_app():
 
     # import bluprints and register
     from camels_serv.api.process_state import process_blueprint
-    app.register_blueprint(process_blueprint)
+    app.register_blueprint(process_blueprint, url_prefix='/state')
 
     # define the 'landing page' api endpoint
     @app.route('/', methods=['GET', 'POST'])
@@ -21,7 +21,14 @@ def get_app():
         info = {
             'message': 'Welcome to CAMELS-DE API. Maybe you wanted to visit https://camels-de.org',
             'api_version': __version__,
-            'python_version': f"{version_info.major}.{version_info.minor}.{version_info.micro}"
+            'python_version': f"{version_info.major}.{version_info.minor}.{version_info.micro}",
+            'api_endpoints': [
+                {
+                    'url': '/state',
+                    'description': 'Current processing state of the CAMELS-DE dataset',
+                    'methods': ['GET']
+                }
+            ]
         }
 
         return jsonify(info)

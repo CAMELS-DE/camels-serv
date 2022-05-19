@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 import geopandas as gpd
+import fiona
 
 from camels_serv import EZG_DIR, INPUT_DIR, OUTPUT_DIR
 
@@ -51,6 +52,21 @@ class ProcessState:
 
         return gdf
 
+    def load_ezgs(self) -> gpd.GeoDataFrame:
+        """
+        Scan the EZGs folder for valid geospatial files and match the
+        names in the pegel file
+        """
+        # get all files
+        gdf = gpd.GeoDataFrame()
+
+        for file_name in os.listdir(self.ezg_dir):
+            _, extension = os.path.splitext(file_name)
+            if extension in fiona.supported_drivers:
+                right = gpd.read_file(os.path.join(self.ezg_dir, file_name))
+                gdf = gpd.GeoDataFrame(pd.concat([gdf, right]))
+        return gdf
+
     def has_output(self) -> gpd.GeoDataFrame:
         """
         Return the pegel GeoDataFrame enhanced with info about existing output
@@ -62,6 +78,16 @@ class ProcessState:
         self.pegel['has_output'] = has_out
 
         return self.pegel
+    
+    def has_discharge(self) -> gpd.GeoDataFrame:
+        """
+        Check if there is an 'discahrge.csv' file in the output folder
+        """
+        # go for each folder
+        has_dis = [os.path.exists(os.path.join(self.output_dir, name, 'discharge*')) for name in self.pegel.name]
+
+        # add the info
+        self.pegel['has_discharge'] = has_dis
         
     def describe(self) -> gpd.GeoDataFrame:
         """
