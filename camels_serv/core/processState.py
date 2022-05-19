@@ -88,13 +88,16 @@ class ProcessState:
 
         # add the info
         self.pegel['has_discharge'] = has_dis
+
+        return self.pegel
         
     def describe(self) -> gpd.GeoDataFrame:
         """
         Return a described GeoDataFrame for all pegel.
         """
         # add output
-        gdf = self.has_output()
+        self.has_output()
+        gdf = self.has_discharge()
 
         return gdf
     

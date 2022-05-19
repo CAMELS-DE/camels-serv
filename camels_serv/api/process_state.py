@@ -1,7 +1,7 @@
 import json
 import io
 
-from flask import Blueprint, jsonify, send_file, jsonify
+from flask import Blueprint, jsonify, send_file, jsonify, make_response
 
 from camels_serv.core.processState import ProcessState
 
@@ -33,8 +33,11 @@ def return_state_describe(format_: str = '.json'):
         js = json.loads(gdf.to_json())
         return jsonify(js)
     elif 'csv' in format_.lower():
-        csv = gdf.to_csv()
-        return csv
+        output = make_response(gdf.to_csv(index=None))
+        output.headers["Content-Disposition"] = "attachment; filename=camels_pegel.csv"
+        output.headers["Content-Type"] = "text/csv"
+        return output
+
     elif 'gpkg' in format_.lower():
         buffer = io.BytesIO()
         gdf.to_file(buffer, layer='pegel', driver='GPKG')
