@@ -21,7 +21,7 @@ jobs:
         tags: latest,${{ github.ref_name }}
 
     - name: Run new image
-      uses: garygrossgarten/github-action-ssh@latest
+      uses: garygrossgarten/github-action-ssh@v0.6.3
       with:
         command: | 
           docker container stop camels_serv
