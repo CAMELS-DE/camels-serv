@@ -39,13 +39,13 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}    
     
-    - name: Run new image
-      uses: garygrossgarten/github-action-ssh@v0.6.3
-      with:
-        command: | 
-          docker container stop camels_serv
-          docker container rm camels_serv
-          docker run -d -p 8042:5000 --restart always --name camels_serv  -v /home/camel/camelsp/output_data:/src/data ghcr.io/camels-de/camels-serv:${{ github.ref_name }}
-        host: ${{ secrets.HOST }}
-        passphrase: ${{ secrets.PASSPHRASE }}
-        username: ${{ secrets.USER }}
+#    - name: Run new image
+#      uses: garygrossgarten/github-action-ssh@v0.6.3
+#      with:
+#        command: | 
+#          docker container stop camels_serv
+#          docker container rm camels_serv
+#          docker run -d -p 8042:5000 --restart always --name camels_serv  -v /home/camel/camelsp/output_data:/src/data ghcr.io/camels-de/camels-serv:${{ github.ref_name }}
+#        host: ${{ secrets.HOST }}
+#        passphrase: ${{ secrets.PASSPHRASE }}
+#        username: ${{ secrets.USER }}
