@@ -6,9 +6,10 @@ LABEL maintainer="Mirko Mälicke"
 
 # build the structure
 RUN mkdir -p /src/camels_serv
-RUN mkdir -p /src/dev/ezgs
-RUN mkdir -p /src/dev/input_dir
-RUN mkdir -p /src/dev/output_dir
+RUN mkdir -p /src/data
+
+# install libgdal for fiona
+RUN apt-get update && apt-get install -y libgdal-dev
 
 # copy the sources
 COPY ./camels_serv /src/camels_serv
@@ -20,6 +21,7 @@ COPY ./README.md /src/README.md
 
 # build the package
 RUN pip install --upgrade pip
+
 RUN cd /src && pip install -e .
 
 # create the entrypoint

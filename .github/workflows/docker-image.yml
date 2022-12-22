@@ -45,7 +45,7 @@ jobs:
         command: | 
           docker container stop camels_serv
           docker container rm camels_serv
-          docker run -d -p 8042:5000 --restart always --name camels_serv  -v /home/camel/camelsp/output_data:/src/dev ghcr.io/camels-de/camels-serv:${{ github.ref_name }}
+          docker run -d -p 8042:5000 --restart always --name camels_serv  -v /home/camel/camelsp/output_data:/src/data ghcr.io/camels-de/camels-serv:${{ github.ref_name }}
         host: ${{ secrets.HOST }}
         passphrase: ${{ secrets.PASSPHRASE }}
         username: ${{ secrets.USER }}
