@@ -1,5 +1,6 @@
 import json
 import io
+import os
 
 from flask import Blueprint, jsonify, send_file, jsonify, make_response
 import geopandas as gpd
@@ -82,6 +83,7 @@ def return_states_describe(format_: str = '.json'):
     # return
     return _geodataframe_to_http_response(gdf, format_, 'camels-de_metadata')
 
+
 @process_blueprint.route('/<string:fedstate>/metadata<string:format_>', methods=['GET', 'POST'])
 def return_fedstate_describe(fedstate: str, format_: str = 'json'):
     # create a ProcessState instance
@@ -102,4 +104,34 @@ def return_fedstate_describe(fedstate: str, format_: str = 'json'):
 
     # return
     return _geodataframe_to_http_response(gdf, format_, f'{fedstate.upper()}_metadata')
+
+
+@process_blueprint.route('/<string:fedstate>/<string:camels_id>/report.<string:fmt>', methods=['GET', 'POST'])
+@process_blueprint.route('/<string:camels_id>/report.<string:fmt>', methods=['GET', 'POST'])
+def get_profile_report(camels_id: str, fmt: str, fedstate: str = None):
+    # check if the format is supported
+    if fmt.lower() not in ('html', 'json'):
+        return jsonify({
+            'status': 404,
+            'message': f'The format {fmt} is not supported.'
+        }), 404
     
+    # get the path
+    state = ProcessState()
+    path = os.path.join(state.base_path, 'report', f"{camels_id}.{fmt.lower()}")
+
+    # check if this report exists
+    if not os.path.exists(path):
+        return jsonify({
+            'status': 404,
+            'message': f"The identifier '{camels_id.upper()}' has no report information. Maybe it was not calculated yet, or the station has no data."
+        }), 404
+    
+    # otherwise load and return
+    with open(path, 'r') as f:
+        content = f.read()
+    
+    response = make_response(content)
+    response.headers['Content-Type'] = f"text/{fmt.lower()}"
+
+    return response
