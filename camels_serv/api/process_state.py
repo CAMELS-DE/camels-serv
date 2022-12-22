@@ -14,13 +14,15 @@ def index():
         'message': 'CAMELS-DE API - processing state API',
         'endpoints': [
             {
-                'url': '/state/pegel.<csv|json|gpkg>',
+                'url': '/state/metadata.<csv|json|gpkg>',
                 'description': 'Get the current processing status of each pegel',
                 'methods': ['GET', 'POST']
             }
         ]
     })
-@process_blueprint.route('/pegel<string:format_>', methods=['GET', 'POST'])
+
+
+@process_blueprint.route('/metadata<string:format_>', methods=['GET', 'POST'])
 def return_state_describe(format_: str = '.json'):
     # create a ProcessState instance
     state = ProcessState()
@@ -34,7 +36,7 @@ def return_state_describe(format_: str = '.json'):
         return jsonify(js)
     elif 'csv' in format_.lower():
         output = make_response(gdf.to_csv(index=None))
-        output.headers["Content-Disposition"] = "attachment; filename=camels_pegel.csv"
+        output.headers["Content-Disposition"] = "attachment; filename=camels-de_metadata.csv"
         output.headers["Content-Type"] = "text/csv"
         return output
 
@@ -48,7 +50,7 @@ def return_state_describe(format_: str = '.json'):
             buffer,
             mimetype='application/geopackage+sqlite3',
             as_attachment=True,
-            attachment_filename='camels_pegel.gpkg'
+            attachment_filename='camels-de_metadata.gpkg'
         )
 
     else:
