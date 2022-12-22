@@ -10,23 +10,42 @@ jobs:
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
-    - name: build and push
-      uses: docker/build-push-action@v1
+      uses: actions/checkout@v3
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Login to ghcr.io
+      uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: "hydrocode-de"
-        password: ${{ secrets.PAT }}
-        repository: camels-de/camels-serv
-        tags: latest,${{ github.ref_name }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ghcr.io/vforwater/tbr_moving_dispersion
+
+    - name: Build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}    
+    
     - name: Run new image
       uses: garygrossgarten/github-action-ssh@v0.6.3
       with:
         command: | 
           docker container stop camels_serv
           docker container rm camels_serv
-          docker run -d -p 8042:5000 --restart always --name camels_serv  -v /home/camels:/src/dev ghcr.io/camels-de/camels-serv:${{ github.ref_name }}
+          docker run -d -p 8042:5000 --restart always --name camels_serv  -v /home/camel/camelsp/output_data:/src/dev ghcr.io/camels-de/camels-serv:${{ github.ref_name }}
         host: ${{ secrets.HOST }}
         passphrase: ${{ secrets.PASSPHRASE }}
         username: ${{ secrets.USER }}
