@@ -1,6 +1,6 @@
 import os
 
-BASEPATH = os.path.abspath(os.environ.get('BASEPATH', '/src/dev'))
+BASEPATH = os.path.abspath(os.environ.get('BASEPATH', '/src/data'))
 
 
 # set some filenames
