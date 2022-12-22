@@ -1,6 +1,6 @@
 import os
 
-BASEPATH = os.path.abspath(os.environ.get('BASEPATH', '/home/camel/camelsp/output_data'))
+BASEPATH = os.path.abspath(os.environ.get('BASEPATH', '/src/dev'))
 
 
 # set some filenames
