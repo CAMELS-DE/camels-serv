@@ -29,7 +29,7 @@ class ProcessState:
         # build the fname
         fname = os.path.join(self.metadata_path, config.METADATA_FILE_NAME)
         df = pd.read_csv(fname)
-        gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.x, df.y))
+        gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.x, df.y), crs=3035).to_crs(epsg=4326)
         
         return gdf
 
