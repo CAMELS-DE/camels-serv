@@ -15,6 +15,9 @@ def get_app():
     from camels_serv.api.process_state import process_blueprint
     app.register_blueprint(process_blueprint, url_prefix='/state')
 
+    from camels_serv.api.static import static_blueprint
+    app.register_blueprint(static_blueprint, url_prefix='/static')
+
     # define the 'landing page' api endpoint
     @app.route('/', methods=['GET', 'POST'])
     def index():
@@ -27,6 +30,11 @@ def get_app():
                     'url': '/state',
                     'description': 'Current processing state of the CAMELS-DE dataset',
                     'methods': ['GET']
+                },
+                {
+                    'url': '/static',
+                    'description': 'Static, auxiliary data like adminsitrative boundaries, processed from OpenStreetMap',
+                    'methods': ['GET']
                 }
             ]
         }
@@ -36,6 +44,16 @@ def get_app():
     return app
 
 
-if __name__ == '__main__':
+def run(**kwargs):
+    # set some defaults
+    if 'host' not in kwargs:
+        kwargs['host'] = '0.0.0.0'
+    
     app = get_app()
-    app.run(debug=True, host="0.0.0.0")
+    app.run(**kwargs)
+
+
+if __name__ == '__main__':
+    import fire
+    fire.Fire(run)
+
