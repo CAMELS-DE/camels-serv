@@ -24,6 +24,16 @@ def index():
                 'url': '/state/<NUTS_LVL2>/metadata.<csv|json|gpkg|geojson|txt>',
                 'description': 'Get the current processing status of all stations in the respective federal state on the CAMELS-DE processing server',
                 'methods': ['GET', 'POST']
+            },
+            {
+                'url': '/state/<NUTS_LVL2>/<CAMELS_ID>.<json|html>',
+                'description': 'Get a pandas-profiling based statistical HTML or JSON report for the specified <CAMELS_ID> time series.',
+                'methods': ['GET', 'POST']
+            },
+            {
+                'url': '/state/<CAMELS_ID>.<json|html>',
+                'description': 'Get a pandas-profiling based statistical HTML or JSON report for the specified <CAMELS_ID> time series.',
+                'methods': ['GET', 'POST']
             }
         ]
     })
