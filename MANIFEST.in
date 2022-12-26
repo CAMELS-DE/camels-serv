@@ -1,2 +1,3 @@
 include requirements.txt
 include Readme.md
+graft camels_serc/static/*.geojson
