@@ -30,6 +30,11 @@ def get_app():
                     'url': '/state',
                     'description': 'Current processing state of the CAMELS-DE dataset',
                     'methods': ['GET']
+                },
+                {
+                    'url': '/static',
+                    'description': 'Static, auxiliary data like adminsitrative boundaries, processed from OpenStreetMap',
+                    'methods': ['GET']
                 }
             ]
         }
