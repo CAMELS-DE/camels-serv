@@ -18,6 +18,9 @@ def get_app():
     from camels_serv.api.static import static_blueprint
     app.register_blueprint(static_blueprint, url_prefix='/static')
 
+    from camels_serv.api.data import data_blueprint
+    app.register_blueprint(data_blueprint, url_prefix='/data')
+
     # define the 'landing page' api endpoint
     @app.route('/', methods=['GET', 'POST'])
     def index():
