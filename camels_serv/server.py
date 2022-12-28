@@ -30,6 +30,11 @@ def get_app():
             'python_version': f"{version_info.major}.{version_info.minor}.{version_info.micro}",
             'api_endpoints': [
                 {
+                    'url': '/data',
+                    'description': 'Data retrieval API. Load CAMELS-DE subsets here.',
+                    'methods': ['GET']
+                },
+                {
                     'url': '/state',
                     'description': 'Current processing state of the CAMELS-DE dataset',
                     'methods': ['GET']
