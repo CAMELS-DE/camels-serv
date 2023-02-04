@@ -24,6 +24,9 @@ def get_app():
     from camels_serv.api.metrics import metric_blueprint
     app.register_blueprint(metric_blueprint, url_prefix='/metrics')
 
+    from camels_serv.api.auth import auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
     # define the 'landing page' api endpoint
     @app.route('/', methods=['GET', 'POST'])
     def index():
