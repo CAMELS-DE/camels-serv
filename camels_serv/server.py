@@ -21,6 +21,9 @@ def get_app():
     from camels_serv.api.data import data_blueprint
     app.register_blueprint(data_blueprint, url_prefix='/data')
 
+    from camels_serv.api.metrics import metric_blueprint
+    app.register_blueprint(metric_blueprint, url_prefix='/metrics')
+
     # define the 'landing page' api endpoint
     @app.route('/', methods=['GET', 'POST'])
     def index():
@@ -42,6 +45,11 @@ def get_app():
                 {
                     'url': '/static',
                     'description': 'Static, auxiliary data like adminsitrative boundaries, processed from OpenStreetMap',
+                    'methods': ['GET']
+                },
+                {
+                    'url': '/metrics',
+                    'descirption': 'CAMELS-DE dataset metrics API. Can be used to retrieve and save dataset-wide metrics.',
                     'methods': ['GET']
                 }
             ]
