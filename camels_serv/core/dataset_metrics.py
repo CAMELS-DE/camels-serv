@@ -58,3 +58,21 @@ class DatasetMetrics:
         """"""
         return self._load_metric_resource(name, extension='description.json')
 
+    def save_new_metric(self, name: str, **data: dict):
+        # check the contained data
+        # contains a plotly figure
+        if 'plotly' in data:
+            with open(os.path.join(self.metrics_folder, f"{name}.plotly.json"), "w") as f:
+                json.dump(data['plotly'], f)
+        
+        # contains a description
+        if 'description' in data or 'title' in data or 'body' in data:
+            payload = {
+                'title': data.get('title', f"METRIC {name.upper()}"),
+                'body': data.get('body', data.get('description', 'This Metric has no description')),
+                'actions': data.get('actions', [])
+            }
+
+            # save
+            with open(os.path.join(self.metrics_folder, f"{name}.description.json"), "w") as f:
+                json.dump(payload, f)
