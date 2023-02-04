@@ -3,3 +3,5 @@ flask_cors
 geopandas
 pandas
 fire
+requests
+python-dotenv
