@@ -30,6 +30,19 @@ def index():
     })
 
 
+@metric_blueprint.route('/list', methods=['GET', 'POST'])
+def list_metrics():
+    # initialize the Metric Loader
+    metrics = DatasetMetrics()
+
+    # load all figues
+    mets = metrics.list_metrics()
+    return jsonify({
+        'metrics': mets,
+        'count': len(mets)
+    })
+
+
 @metric_blueprint.route('/<string:name>', methods=['GET', 'POST'])
 def get_card(name: str):
     # initialize the Metric Loader

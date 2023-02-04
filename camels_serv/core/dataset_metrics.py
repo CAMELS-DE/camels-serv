@@ -16,22 +16,23 @@ class DatasetMetrics:
         self.metadata_path = os.path.join(self.base_path, 'metadata')
         self.metrics_folder = os.path.join(self.base_path, 'metrics')
 
-    def list_plotly_figures(self) -> list[dict]:
+    def list_metrics(self) -> list[dict]:
         """
         List all figure JSONs found in the diagnostics folder
         """
-        files = []
+        files = {}
         for fname in os.listdir(self.metrics_folder):
             # check if this is noe
-            if fname.endswith('.plotly.json'):
-                files.append({
-                    'path': os.path.abspath(fname),
-                    'relative': os.path.relpath(os.path.abspath(fname), self.base_path),
-                    'filename': os.path.basename(fname),
-                    'name': os.path.basename(fname).split('.').pop(0)
-                })
+            if fname.endswith('.plotly.json') or fname.endswith('.description.json'):
+                name, typ, ext = os.path.basename(fname).split('.')
+                
+                # check if the metric exists
+                if name in files:
+                    files[name][typ] = fname
+                else:
+                    files[name] = {'name': name, typ: fname}
 
-        return files
+        return list(files.values())
 
     def load_plotly_figure(self, name: str) -> dict:
         """"""
