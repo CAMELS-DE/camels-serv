@@ -11,8 +11,9 @@ You need access to a copy of the CAMELS-DE dataset on the same machine
 docker run -d -p 127.0.0.1:5000:5000 -v /path/to/dataset:/src/data ghcr.io/camels-de/camels_serv
 ```
 
-The API has three endpoints:
+The API has four endpoints:
 
 * `'/data'` - Data retrieval API - not productive until the dataset is published
 * `'/state'` - Dataset Processing state - can be used until the dataset is published
-* `'/static'` - Auxiliary geodata for usage along with the data and metadata    
+* `'/static'` - Auxiliary geodata for usage along with the data and metadata
+* `'/metrics'` - CAMELS-DE dataset metrics API   
