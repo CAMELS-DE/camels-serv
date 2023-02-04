@@ -72,7 +72,7 @@ def _geodataframe_to_http_response(gdf: gpd.GeoDataFrame, fmt: str, fname: str =
             buffer,
             mimetype='application/geopackage+sqlite3',
             as_attachment=True,
-            attachment_filename=f'{fname}.gpkg'
+            download_name=f'{fname}.gpkg'
         )
 
     else:
