@@ -56,14 +56,20 @@ class DatasetMetrics:
     
     def load_plotly_description(self, name: str) -> dict:
         """"""
-        return self._load_metric_resource(name, extension='description.json')
+        desc = self._load_metric_resource(name, extension='description.json')
+
+        # add the name if not already contained
+        if not 'name' in desc:
+            desc['name'] = name
+        
+        return desc
 
     def save_new_metric(self, name: str, **data: dict):
         # check the contained data
         # contains a plotly figure
-        if 'plotly' in data:
+        if 'figure' in data:
             with open(os.path.join(self.metrics_folder, f"{name}.plotly.json"), "w") as f:
-                json.dump(data['plotly'], f)
+                json.dump(data['figure'], f)
         
         # contains a description
         if 'description' in data or 'title' in data or 'body' in data:
